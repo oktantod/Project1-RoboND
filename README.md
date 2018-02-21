@@ -27,9 +27,8 @@
 [image2]: ./output/Image2.png
 [image3]: ./output/Image3.png
 [image4]: ./output/Image4.png
-[image5]: ./output/Image2.png
-[image6]: ./output/Image2.png
-[image7]: ./output/Image2.png
+[image5]: ./output/Image5.png
+[image6]: ./output/Image6.png
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/916/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -94,20 +93,25 @@ Video result of this jupyter notebook program as you can see in this picture bel
 
 ![video result][image4]
 
-![alt text][image2]
+
 ### Autonomous Navigation and Mapping
 
-#### 1. Fill in the `perception_step()` (at the bottom of the `perception.py` script) and `decision_step()` (in `decision.py`) functions in the autonomous mapping scripts and an explanation is provided in the writeup of how and why these functions were modified as they were.
+#### 1. Modification of perception_step() and decision_step()
+##### perception_step()
+In perception step, the function that we get from repositories is still empty. Therefore we need to modify the function to make the rover can get information of navigable terrain, rock and obstacle from camera and then make decision and action. There are seven standard step that have been described in Notebook analysis that applied that is perspective transform, thresholding, find rock, update rover vision, convert  image vision into rover centric coordinate and then convert into world coordinate.
 
+Rover would be move in direction of angle polar coordinate get from mean navigable terrain.
 
-#### 2. Launching in autonomous mode your rover can navigate and map autonomously.  Explain your results and how you might improve them in your writeup.  
+The new thing is if there has a rock detected, then inform to pick_up the rock in direction of angle location of rock. Update the near_sample as True, and when the distance closed < 6, Rover then turn into stop mode and send_pickup to be true.
 
-**Note: running the simulator with different choices of resolution and graphics quality may produce different results, particularly on different machines!  Make a note of your simulator settings (resolution and graphics quality set on launch) and frames per second (FPS output to terminal by `drive_rover.py`) in your writeup when you submit the project so your reviewer can reproduce your results.**
+##### decision_step()
+In decision_step, the changed value have been made in set steering range +/- 15 into +/- 10. This changed is due to, when the rover in area of big navigable space in autonomous mode, the rover only make a circle move.
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Another changed is on forward mode when rock detected. As the rover navigation angle when rock detected is angle of rock then the value of Rover.nav_angles would be less than Rover.stop_forward. Therefore I was add or logic Rover.near_sample to the operation. Then the value would be true when rock detected
 
+#### 2. Launching in autonomous mode that rover can navigate and map autonomously.  The results and how you might improve them in your writeup.  
 
+![Result Image][image5]
+When the autonomous mode
 
-![alt text][image3]
-
-
+![Result Image Pick Up Stone][image6]
