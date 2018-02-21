@@ -112,6 +112,6 @@ Another changed is on forward mode when rock detected. As the rover navigation a
 #### 2. Launching in autonomous mode that rover can navigate and map autonomously.  The results and how you might improve them in your writeup.  
 
 ![Result Image][image5]
-When the autonomous mode
+When in autonomous mode without picking up the stone, the program can mapped and detect rock in almost completed. But when pick_up rock activated, I have a problem the rover could not move again after pick the rock as a picture bellow. I must optimise the program therefore the rover can mapping the navigable terrain and can collect the rock that spread in the maps.
 
 ![Result Image Pick Up Stone][image6]
