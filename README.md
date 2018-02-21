@@ -26,7 +26,7 @@
 [image1]: ./output/Image1.png
 [image2]: ./output/Image2.png
 [image3]: ./output/Image3.png
-[image4]: ./output/Image2.png
+[image4]: ./output/Image4.png
 [image5]: ./output/Image2.png
 [image6]: ./output/Image2.png
 [image7]: ./output/Image2.png
@@ -68,8 +68,11 @@ warped = perspect_transform(img, source, destination)
 mask = perspect_transform(np.ones_like(img[:,:,0]), source, destination)
 
 3) Apply color threshold to identify navigable terrain/obstacles/rock samples
+
 threshed = color_thresh(warped)
+
 obs = mask - threshed
+
 rock = find_rocks(img)
 
 Navigable area is defined by thresholded colour RGB which have value more than 165 each component. The output in binery image.
@@ -77,34 +80,19 @@ Navigable area is defined by thresholded colour RGB which have value more than 1
 Obstacle area is defined by mask area subtract by binary navigable area. And rock get from function find_rocks using HSV selection color.
 
 4) Convert thresholded image pixel values to rover-centric coords
-    xpix, ypix = rover_coords(threshed)
-    xpix_obs, ypix_obs = rover_coords(obs)
-
-Get rover centric coordinate of navigable area and obstacle
+Using rover_coords function to get rover centric coordinate of navigable area and obstacle
 
 5) Convert rover-centric pixel values to world coords
-    scale = 10
-    x_world, y_world = pix_to_world(xpix, ypix, data.xpos[data.count], 
-                                data.ypos[data.count], data.yaw[data.count], 
-                                data.worldmap.shape[0], scale)
-    
-    x_world_obs, y_world_obs = pix_to_world(xpix_obs, ypix_obs, data.xpos[data.count], 
-                                data.ypos[data.count], data.yaw[data.count], 
-                                data.worldmap.shape[0], scale)
-
-Methods above is used for converting from rover centric coordinate into world coordinate.
+Each rover-centric coordinate of navigable area and obstacle than maps to world coordinate using pix_to_world function
 
 6) Update worldmap (to be displayed on right side of screen)
-    data.worldmap[y_world_obs, x_world_obs, 0] = 255
-    if rock.any():
-        xpix_rock, ypix_rock = rover_coords(rock)
-        x_world_rock, y_world_rock = pix_to_world(xpix_rock, ypix_rock, data.xpos[data.count], 
-                                    data.ypos[data.count], data.yaw[data.count], 
-                                    data.worldmap.shape[0], scale)
-        data.worldmap[y_world_rock, x_world_rock, 1] = 255
+Update data, data.worldmap component which is obstacle located in Red component, and navigable terrain in Blue component.
 
-    data.worldmap[y_world, x_world, 2] = 255
+If rock available, then image get from find_rocks converted to rover coordinate and then mapped to world coordinate. Rock image put in data.world green component.
 
+Video result of this jupyter notebook program as you can see in this picture bellow :
+
+![video result][image4]
 
 ![alt text][image2]
 ### Autonomous Navigation and Mapping
