@@ -14,8 +14,9 @@ def decision_step(Rover):
     if Rover.nav_angles is not None:
         # Check for Rover.mode status
         if Rover.mode == 'forward': 
+            print('Forward, max velocity : ', Rover.max_vel)
             # Check the extent of navigable terrain
-            if len(Rover.nav_angles) >= Rover.stop_forward:  
+            if len(Rover.nav_angles) >= Rover.stop_forward or Rover.near_sample:  
                 # If mode is forward, navigable terrain looks good 
                 # and velocity is below max, then throttle 
                 if Rover.vel < Rover.max_vel:
@@ -25,7 +26,7 @@ def decision_step(Rover):
                     Rover.throttle = 0
                 Rover.brake = 0
                 # Set steering to average angle clipped to the range +/- 15
-                Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+                Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -10, 10)
             # If there's a lack of navigable terrain pixels then go to 'stop' mode
             elif len(Rover.nav_angles) < Rover.stop_forward:
                     # Set mode to "stop" and hit the brakes!
@@ -37,6 +38,7 @@ def decision_step(Rover):
 
         # If we're already in "stop" mode then make different decisions
         elif Rover.mode == 'stop':
+            print('Stop')
             # If we're in stop mode but still moving keep braking
             if Rover.vel > 0.2:
                 Rover.throttle = 0
@@ -58,11 +60,12 @@ def decision_step(Rover):
                     # Release the brake
                     Rover.brake = 0
                     # Set steer to mean angle
-                    Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -15, 15)
+                    Rover.steer = np.clip(np.mean(Rover.nav_angles * 180/np.pi), -10, 10)
                     Rover.mode = 'forward'
     # Just to make the rover do something 
     # even if no modifications have been made to the code
     else:
+        print('Nav angle not true')
         Rover.throttle = Rover.throttle_set
         Rover.steer = 0
         Rover.brake = 0

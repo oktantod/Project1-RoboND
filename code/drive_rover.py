@@ -59,7 +59,7 @@ class RoverState():
         # of navigable terrain pixels.  This is a very crude form of knowing
         # when you can keep going and when you should stop.  Feel free to
         # get creative in adding new fields or modifying these!
-        self.stop_forward = 50 # Threshold to initiate stopping
+        self.stop_forward = 350 # Threshold to initiate stopping
         self.go_forward = 500 # Threshold to go forward again
         self.max_vel = 2 # Maximum velocity (meters/second)
         # Image output from perception step
@@ -99,7 +99,7 @@ def telemetry(sid, data):
         fps = frame_counter
         frame_counter = 0
         second_counter = time.time()
-    print("Current FPS: {}".format(fps))
+#    print("Current FPS: {}".format(fps))
 
     if data:
         global Rover
@@ -126,8 +126,11 @@ def telemetry(sid, data):
                 send_pickup()
                 # Reset Rover flags
                 Rover.send_pickup = False
+                Rover.near_sample = False
+                Rover.picking_up = False
             else:
                 # Send commands to the rover!
+                print('Send commands to the rover :', Rover.throttle, Rover.brake, Rover.steer)
                 commands = (Rover.throttle, Rover.brake, Rover.steer)
                 send_control(commands, out_image_string1, out_image_string2)
 
@@ -135,6 +138,7 @@ def telemetry(sid, data):
         else:
 
             # Send zeros for throttle, brake and steer and empty images
+            print('Invalid Telemetry')
             send_control((0, 0, 0), '', '')
 
         # If you want to save camera images from autonomous driving specify a path
