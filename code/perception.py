@@ -162,7 +162,7 @@ def perception_step(Rover):
 #        Rover.max_vel = 2
 #        Rover.mode = 'forward'
         
-    if rock.any() and Rover.samples_located > 4 :
+    if rock.any():
         dist, angles = to_polar_coords(xpix_rock, ypix_rock)
         Rover.near_sample = True
         
