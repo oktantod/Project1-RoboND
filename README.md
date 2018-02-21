@@ -55,10 +55,56 @@ Color decision using opencv built in function inRange. The result of image in bl
 
 ![bw image terrain, image mask, and image rock][image3]
 
-Navigable terrain, obstacle and rock image.
+Navigable terrain, obstacle and rock image respectively.
 
-#### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
-And another! 
+#### 2. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on test data acquired by recorded training mode using the `moviepy` functions provided to create video output. 
+
+1) Define source and destination points for perspective transform
+Source and destination is using the same as above and references using grid image pixel.
+
+2) Apply perspective transform
+using perspect_transform to get navigable area and mask area (area of camera view)
+warped = perspect_transform(img, source, destination)
+mask = perspect_transform(np.ones_like(img[:,:,0]), source, destination)
+
+3) Apply color threshold to identify navigable terrain/obstacles/rock samples
+threshed = color_thresh(warped)
+obs = mask - threshed
+rock = find_rocks(img)
+
+Navigable area is defined by thresholded colour RGB which have value more than 165 each component. The output in binery image.
+
+Obstacle area is defined by mask area subtract by binary navigable area. And rock get from function find_rocks using HSV selection color.
+
+4) Convert thresholded image pixel values to rover-centric coords
+    xpix, ypix = rover_coords(threshed)
+    xpix_obs, ypix_obs = rover_coords(obs)
+
+Get rover centric coordinate of navigable area and obstacle
+
+5) Convert rover-centric pixel values to world coords
+    scale = 10
+    x_world, y_world = pix_to_world(xpix, ypix, data.xpos[data.count], 
+                                data.ypos[data.count], data.yaw[data.count], 
+                                data.worldmap.shape[0], scale)
+    
+    x_world_obs, y_world_obs = pix_to_world(xpix_obs, ypix_obs, data.xpos[data.count], 
+                                data.ypos[data.count], data.yaw[data.count], 
+                                data.worldmap.shape[0], scale)
+
+Methods above is used for converting from rover centric coordinate into world coordinate.
+
+6) Update worldmap (to be displayed on right side of screen)
+    data.worldmap[y_world_obs, x_world_obs, 0] = 255
+    if rock.any():
+        xpix_rock, ypix_rock = rover_coords(rock)
+        x_world_rock, y_world_rock = pix_to_world(xpix_rock, ypix_rock, data.xpos[data.count], 
+                                    data.ypos[data.count], data.yaw[data.count], 
+                                    data.worldmap.shape[0], scale)
+        data.worldmap[y_world_rock, x_world_rock, 1] = 255
+
+    data.worldmap[y_world, x_world, 2] = 255
+
 
 ![alt text][image2]
 ### Autonomous Navigation and Mapping
