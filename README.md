@@ -40,12 +40,12 @@
 ### Notebook Analysis
 #### 1. Color selection of navigable terrain, obstacles and rock samples
 My program using calibration grid and rock that provided by udacity repositories. This is the result of image :
-![example of grid image, and example of a rock image] [image1]
+![example of grid image, and example of a rock image][image1]
 
 After we get grid image, than define source and destination for perpective transform (perspect_transform). Code for perspect_transform nothing changes. Source and destination for first time is used for find mask area that is the area of view camera.
 
 Navigable terrain we can get from an image that we have received from rover camera and we doing perspective transform from it. Obstacles we can get from mask area subtract by navigable terrain. Image that we can get from this process that is:
-![image terrain, image mask, and image rock] [image2]
+![image terrain, image mask, and image rock][image2]
 
 #### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
 And another! 
