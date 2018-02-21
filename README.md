@@ -1,5 +1,6 @@
 ## Project: Search and Sample Return
-### Writeup Template: You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+### First Project Submission of Term 1 Robotics Software Engineer Nanodegree Program Udacity 
+### Oktanto Dedi Winarko
 
 ---
 
@@ -22,25 +23,29 @@
 
 [//]: # (Image References)
 
-[image1]: ./misc/rover_image.jpg
-[image2]: ./calibration_images/example_grid1.jpg
-[image3]: ./calibration_images/example_rock1.jpg 
+[image1]: ./output/Image1.png
+[image2]: ./output/Image2.png
+[image3]: ./output/Image2.png
+[image4]: ./output/Image2.png
+[image5]: ./output/Image2.png
+[image6]: ./output/Image2.png
+[image7]: ./output/Image2.png
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/916/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
-
-You're reading it!
+### README
 
 ### Notebook Analysis
-#### 1. Run the functions provided in the notebook on test images (first with the test data provided, next on data you have recorded). Add/modify functions to allow for color selection of obstacles and rock samples.
-Here is an example of how to include an image in your writeup.
+#### 1. Color selection of navigable terrain, obstacles and rock samples
+My program using calibration grid and rock that provided by udacity repositories. This is the result of image :
+![example of grid image, and example of a rock image] [image1]
 
-![alt text][image1]
+After we get grid image, than define source and destination for perpective transform (perspect_transform). Code for perspect_transform nothing changes. Source and destination for first time is used for find mask area that is the area of view camera.
+
+Navigable terrain we can get from an image that we have received from rover camera and we doing perspective transform from it. Obstacles we can get from mask area subtract by navigable terrain. Image that we can get from this process that is:
+
 
 #### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
 And another! 
